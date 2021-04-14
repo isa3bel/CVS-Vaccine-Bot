@@ -8,6 +8,7 @@ import time
 import os
 from twilio.rest import Client
 from decouple import config
+import caffeine
 
 # Your Account Sid and Auth Token from twilio.com/console
 # and set the environment variables. See http://twil.io/secure
@@ -19,14 +20,14 @@ client = Client(account_sid, auth_token)
 def get_chrome_driver():
     """This sets up our Chrome Driver and returns it as an object"""
     path_to_chrome = "/Users/isabelbolger/Documents/Code/CVS-Vaccine-Bot/chromedriver"
-    chrome_options = webdriver.ChromeOptions() 
-    
+    chrome_options = Options()
     # Keeps the browser open
     chrome_options.add_experimental_option("detach", True)
     
     # Removes the "This is being controlled by automation" alert / notification
     chrome_options.add_experimental_option("excludeSwitches", ['enable-automation'])
-    
+    #Chrome window won't open
+    chrome_options.headless = True
     return webdriver.Chrome(executable_path = path_to_chrome,
                             options = chrome_options)
 
@@ -62,4 +63,9 @@ def findVaccines():
 
 
 if __name__ == "__main__":
+	caffeine.on(display=True)
 	findVaccines()
+	caffeine.off()
+
+
+
