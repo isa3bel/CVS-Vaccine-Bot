@@ -27,7 +27,7 @@ def get_chrome_driver():
     # Removes the "This is being controlled by automation" alert / notification
     chrome_options.add_experimental_option("excludeSwitches", ['enable-automation'])
     #Chrome window won't open
-    #chrome_options.headless = True
+    chrome_options.headless = True
     return webdriver.Chrome(executable_path = path_to_chrome,
                             options = chrome_options)
 
