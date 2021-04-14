@@ -9,8 +9,6 @@ import os
 from twilio.rest import Client
 from decouple import config
 
-
-
 # Your Account Sid and Auth Token from twilio.com/console
 # and set the environment variables. See http://twil.io/secure
 account_sid = config('TWILIO_ACCOUNT_SID')
@@ -32,7 +30,7 @@ def get_chrome_driver():
     return webdriver.Chrome(executable_path = path_to_chrome,
                             options = chrome_options)
 
-def doStuff():
+def findVaccines():
 	try:
 		chrome_driver = get_chrome_driver()
 	except Exception as e:
@@ -46,8 +44,6 @@ def doStuff():
 		wait = WebDriverWait(chrome_driver, 10)
 		wait.until(EC.element_to_be_clickable((By.XPATH, "//a[.//span[text()='Washington']]"))).click()
 		
-		#el = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath, "//span[text()='Available']"))
-		#wait.until()
 		status = wait.until(EC.element_to_be_clickable((By.XPATH, "//span[@class='city' and contains(text(), \"seattle, WA\")]/parent::td/parent::tr//span[@class=\"status\"]"))).text
 		if (status == "Available"):
 			print("available")
@@ -61,16 +57,9 @@ def doStuff():
 		else:
 			print("not available")
 			
-			#don't try again for another 30 min
+			#don't try again for another 5 min
 			time.sleep(300)
 
 
 if __name__ == "__main__":
-	doStuff()
-
-
-
-
-
-
-
+	findVaccines()
