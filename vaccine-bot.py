@@ -27,7 +27,7 @@ def get_chrome_driver():
     # Removes the "This is being controlled by automation" alert / notification
     chrome_options.add_experimental_option("excludeSwitches", ['enable-automation'])
     #Chrome window won't open
-    chrome_options.headless = True
+    #chrome_options.headless = True
     return webdriver.Chrome(executable_path = path_to_chrome,
                             options = chrome_options)
 
@@ -42,8 +42,14 @@ def findVaccines():
 		except:
 			print("failed to get web page")
 
-		wait = WebDriverWait(chrome_driver, 10)
-		wait.until(EC.element_to_be_clickable((By.XPATH, "//a[.//span[text()='Washington']]"))).click()
+		wait = WebDriverWait(chrome_driver, 5)
+		try:
+			wait.until(EC.presence_of_element_located((By.XPATH, "//*[@id=\"acsFocusFirst\"]")))
+			chrome_driver.find_element_by_xpath("//*[@id=\"acsFocusFirst\"]").click()
+			time.sleep(2)
+			wait.until(EC.element_to_be_clickable((By.XPATH, "//a[.//span[text()='Washington']]"))).click()
+		except:
+			wait.until(EC.element_to_be_clickable((By.XPATH, "//a[.//span[text()='Washington']]"))).click()
 		
 		status = wait.until(EC.element_to_be_clickable((By.XPATH, "//span[@class='city' and contains(text(), \"seattle, WA\")]/parent::td/parent::tr//span[@class=\"status\"]"))).text
 		if (status == "Available"):
@@ -63,7 +69,7 @@ def findVaccines():
 
 
 if __name__ == "__main__":
-	caffeine.on(display=True)
+	caffeine.on(display=False)
 	findVaccines()
 	caffeine.off()
 
